@@ -8,11 +8,14 @@ import {
 
 export default class Quik_Mafs extends React.Component {
   render() {
+    var FirstVariable = Math.floor(Math.random() * 100);
+    var SecondVariable = Math.floor(Math.random() * 100);
     return (
       <View style={styles.panel}>
         <View style={styles.greetingBox}>
           <Text style={styles.greeting}>
-            Welcome to React 360
+            First random is: {FirstVariable},
+            Second random is: {SecondVariable}
           </Text>
         </View>
       </View>
