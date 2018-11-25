@@ -15,7 +15,7 @@ function init(bundle, parent, options = {}) {
     r360.getDefaultLocation(),
   );
   // Load the initial environment
-  r360.compositor.setBackground(r360.getAssetURL('shrek.jpg'));
+  r360.compositor.setBackground(r360.getAssetURL('360_world.jpg'));
 }
 
 window.React360 = {init};
