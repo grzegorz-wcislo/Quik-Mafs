@@ -17,24 +17,44 @@ export default class Quik_Mafs extends React.Component {
     selectedQuestion: null
   };
 
+  _newEquation = () => ({
+    ...randomEquation(),
+    questionRotation: {y: Math.random() * 360, x: Math.random() * 100 - 50, z: Math.random() * 20 - 10},
+    resultRotation: {y: Math.random() * 360, x: Math.random() * 100 - 50, z: Math.random() * 20 - 10}
+  });
+
   _selectQuestion = question => {
-    this.setState({selectedQuestion: question, score: this.state.score + 1});
-  }
+    this.setState({selectedQuestion: question});
+    this._checkAnswer();
+  };
 
   _selectResult = result => {
-    this.setState({selectedResult: result, score: this.state.score + 1});
-  }
+    this.setState({selectedResult: result});
+    this._checkAnswer();
+  };
+
+  _checkAnswer = () => {
+    if (this.state.selectedQuestion && this.state.selectedResult) {
+      const hit = this.state.activeEquations.filter(el => el.question === this.state.selectedQuestion && el.result === this.state.selectedResult)[0];
+      if (hit != undefined) {
+        this.setState({score: this.state.score + 1});
+          this.setState({
+            score: this.state.score + 1,
+            activeEquations: this.state.activeEquations.filter(el => !(el.question === this.state.selectedQuestion && el.result === this.state.selectedResult)).concat(this._newEquation())
+          });
+      } else {
+        this.setState({score: 0});
+      }
+    }
+  };
 
   componentDidMount = () => {
     let equations = [];
     for (let i = 0; i < 10; i++) {
-      const equation = randomEquation();
-        equations.push({...equation,
-                          questionRotation: {y: Math.random() * 360, x: Math.random() * 100 - 50, z: Math.random() * 20 - 10},
-                          resultRotation: {y: Math.random() * 360, x: Math.random() * 100 - 50, z: Math.random() * 20 - 10}});
+        equations.push(this._newEquation());
     }
     this.setState({activeEquations: equations});
-  }
+  };
 
   render() {
     return (
@@ -42,8 +62,7 @@ export default class Quik_Mafs extends React.Component {
         style={{transform: [{translate: [0,0,-2]}]}}>
         <View>
           <Text>
-            {this.state.selectedQuestion || "empty equation"}
-            {this.state.selectedResult || "empty result"}
+            Score: {this.state.score}
           </Text>
         </View>
         {this.state.activeEquations.map(el => (
@@ -53,6 +72,7 @@ export default class Quik_Mafs extends React.Component {
                                 {rotateY: el.questionRotation.y},
                                 {rotateZ: el.questionRotation.z},
                                 {translate: [0, 0, -2]}],
+                    color: this.state.selectedQuestion === el.question ? "red" : "white",
                     position: 'absolute',
                     fontSize: 200}}
             onClick={() => this._selectQuestion(el.question)}>
@@ -68,6 +88,7 @@ export default class Quik_Mafs extends React.Component {
                                 {rotateY: el.resultRotation.y},
                                 {rotateZ: el.resultRotation.z},
                                 {translate: [0, 0, -2]}],
+                    color: this.state.selecteResult === el.result ? "red" : "white",
                     position: 'absolute',
                     fontSize: 200}}
             onClick={() => this._selectResult(el.result)}>

@@ -1,4 +1,4 @@
-const DIFFICULTY = 1000;
+const DIFFICULTY = 100;
 
 const randomEquation = () => {
   const num1 = Math.floor(Math.random()*DIFFICULTY) + 1;
