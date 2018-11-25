@@ -4,43 +4,81 @@ import {
   StyleSheet,
   Text,
   View,
+  VrButton,
 } from 'react-360';
 
+import randomEquation from './randomEquation';
+
 export default class Quik_Mafs extends React.Component {
+  state = {
+    score: 0,
+    activeEquations: [],
+    selectedResult: null,
+    selectedQuestion: null
+  };
+
+  _selectQuestion = question => {
+    this.setState({selectedQuestion: question, score: this.state.score + 1});
+  }
+
+  _selectResult = result => {
+    this.setState({selectedResult: result, score: this.state.score + 1});
+  }
+
+  componentDidMount = () => {
+    let equations = [];
+    for (let i = 0; i < 10; i++) {
+      const equation = randomEquation();
+        equations.push({...equation,
+                          questionRotation: {y: Math.random() * 360, x: Math.random() * 100 - 50, z: Math.random() * 20 - 10},
+                          resultRotation: {y: Math.random() * 360, x: Math.random() * 100 - 50, z: Math.random() * 20 - 10}});
+    }
+    this.setState({activeEquations: equations});
+  }
+
   render() {
-    var FirstVariable = Math.floor(Math.random() * 100);
-    var SecondVariable = Math.floor(Math.random() * 100);
     return (
-      <View style={styles.panel}>
-        <View style={styles.greetingBox}>
-          <Text style={styles.greeting}>
-            First random is: {FirstVariable},
-            Second random is: {SecondVariable}
+      <View
+        style={{transform: [{translate: [0,0,-2]}]}}>
+        <View>
+          <Text>
+            {this.state.selectedQuestion || "empty equation"}
+            {this.state.selectedResult || "empty result"}
           </Text>
         </View>
+        {this.state.activeEquations.map(el => (
+          <VrButton
+            style={{transform: [{translate: [0, 0, 2]},
+                                {rotateX: el.questionRotation.x},
+                                {rotateY: el.questionRotation.y},
+                                {rotateZ: el.questionRotation.z},
+                                {translate: [0, 0, -2]}],
+                    position: 'absolute',
+                    fontSize: 200}}
+            onClick={() => this._selectQuestion(el.question)}>
+            <Text>
+              {el.question}
+            </Text>
+          </VrButton>
+        ))}
+        {this.state.activeEquations.map(el => (
+          <VrButton
+            style={{transform: [{translate: [0, 0, 2]},
+                                {rotateX: el.resultRotation.x},
+                                {rotateY: el.resultRotation.y},
+                                {rotateZ: el.resultRotation.z},
+                                {translate: [0, 0, -2]}],
+                    position: 'absolute',
+                    fontSize: 200}}
+            onClick={() => this._selectResult(el.result)}>
+            <Text>
+              {el.result}
+            </Text>
+          </VrButton>
+        ))}
       </View>
     );
   }
 };
-
-const styles = StyleSheet.create({
-  panel: {
-    // Fill the entire surface
-    width: 1000,
-    height: 600,
-    backgroundColor: 'rgba(255, 255, 255, 0.4)',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  greetingBox: {
-    padding: 20,
-    backgroundColor: '#000000',
-    borderColor: '#639dda',
-    borderWidth: 2,
-  },
-  greeting: {
-    fontSize: 30,
-  },
-});
 
 AppRegistry.registerComponent('Quik_Mafs', () => Quik_Mafs);

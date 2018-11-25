@@ -1,9 +1,9 @@
-const DIFFICULTY = 100;
+const DIFFICULTY = 1000;
 
 const randomEquation = () => {
   const num1 = Math.floor(Math.random()*DIFFICULTY) + 1;
   const num2 = Math.floor(Math.random()*DIFFICULTY) + 1;
-  const query = `${num1} + ${num2}`;
+  const question = `${num1} + ${num2}`;
   const operation = Math.floor(Math.random()*3);
 
   switch(operation) {
@@ -17,17 +17,17 @@ const randomEquation = () => {
 };
 
 const add = (a, b) => ({
-  query: `${a}+${b}`,
+  question: `${a}+${b}`,
   result: a + b
 });
 
 const subtract = (a, b) => ({
-  query: `${a}-${b}`,
+  question: `${a}-${b}`,
   result: a - b
 });
 
 const multiply = (a, b) => ({
-  query: `${a}*${b}`,
+  question: `${a}*${b}`,
   result: a * b
 });
 

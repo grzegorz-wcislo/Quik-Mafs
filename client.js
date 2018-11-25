@@ -10,12 +10,10 @@ function init(bundle, parent, options = {}) {
     ...options,
   });
 
-  // Render your app content to the default cylinder surface
-  r360.renderToSurface(
-    r360.createRoot('Quik_Mafs', { /* initial props */ }),
-    r360.getDefaultSurface()
+  r360.renderToLocation(
+    r360.createRoot('Quik_Mafs'),
+    r360.getDefaultLocation(),
   );
-
   // Load the initial environment
   r360.compositor.setBackground(r360.getAssetURL('shrek.jpg'));
 }
